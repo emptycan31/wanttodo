@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>やりたいこと図鑑</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f2f9fd;--card:#ffffff;--ink:#1f3442;--sub:#6b8494;--line:#cfe3ef;--accent:#72C6EF;--ad:#2b86b5;--ok:#2f8f5b;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14202a;--card:#1c2c38;--ink:#e6f2fa;--sub:#8fb0c4;--line:#2f4658;--accent:#72C6EF;--ad:#72C6EF;--ok:#5cc98c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14202a;--card:#1c2c38;--ink:#e6f2fa;--sub:#8fb0c4;--line:#2f4658;--accent:#72C6EF;--ad:#72C6EF;--ok:#5cc98c;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.5}
+header{padding:16px 16px 4px;text-align:center}
+h1{margin:0;font-size:22px;letter-spacing:.1em}
+.sub{color:var(--sub);font-size:12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px}
+.tab.on{background:var(--accent);color:#0d3a52;border-color:var(--accent)}
+main{padding:4px 14px 40px;max-width:720px;margin:0 auto}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+.cat h2{margin:0 0 6px;font-size:17px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cat h2 small{color:var(--sub);font-weight:400;font-size:12px}
+ul{list-style:none;margin:0;padding:0 0 0 1em}
+li{display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px dotted var(--line);font-size:15px}
+li .t{flex:1;min-width:0;word-break:break-all}
+li.done .t{color:var(--ok)}
+.no{color:var(--sub);font-size:12px;min-width:2.4em}
+button{font:inherit;cursor:pointer}
+.ib{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;width:28px;height:28px;padding:0;font-size:13px}
+.ib.del{color:var(--ad)}
+.ib.armed{width:auto;padding:0 6px;background:var(--accent);color:#0d3a52;border-color:var(--accent)}
+.add{display:flex;gap:6px;margin-top:8px;padding-left:1em}
+input[type=text]{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 10px;font:inherit;font-size:15px}
+.btn{border:0;background:var(--accent);color:#0d3a52;border-radius:8px;padding:7px 14px}
+.btn:disabled{opacity:.4}
+.newcat{margin:16px 0;display:flex;gap:6px}
+.msg{color:var(--sub);text-align:center;padding:24px 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.card.got{border-color:var(--ok)}
+.ph{aspect-ratio:1;background:repeating-linear-gradient(45deg,transparent 0 8px,var(--line) 8px 9px);display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:34px;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;cursor:pointer;gap:2px}
+.ph input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+.ph label span{pointer-events:none;border:1px solid var(--sub);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--ink);background:var(--card)}
+.info{padding:8px 10px;font-size:13px}
+.info b{display:block;font-size:14px;word-break:break-all}
+.info .no{display:block}
+.date{color:var(--ok);font-size:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;display:none;z-index:9}
+.ph.over{outline:3px dashed var(--accent);outline-offset:-6px}
+.link{border:0;background:none;color:var(--sub);font-size:11px;padding:2px 0;text-decoration:underline}
+.cov{aspect-ratio:3/4;max-width:260px;margin:6px auto;position:relative;background:#fff;color:#333;border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.cov img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#pastbtn{margin-bottom:8px}
+.cy{position:relative;font-size:48px;font-weight:700;letter-spacing:.05em;padding:2px 14px}
+.pic .cy{background:rgba(255,255,255,.78)}
+.cov input{position:relative;flex:none;width:80%;text-align:center;background:rgba(255,255,255,.85);color:#333;border-color:#ccc}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.btn.s{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.post{display:grid;width:100%;max-width:300px;aspect-ratio:100/148;margin:8px auto;background:#fff;align-content:start;border:1px solid var(--line)}
+.post img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.thumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:6px 0}
+.tb{border:2px solid var(--line);padding:0;background:none;border-radius:6px;overflow:hidden}
+.tb img{width:56px;height:56px;object-fit:cover;display:block}
+input[type=text].ordin{flex:none;width:2.8em;text-align:center;padding:3px 2px;margin-right:4px;font-size:14px}
+input[type=date]{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:3px 4px;font:inherit;font-size:13px;max-width:calc(100% - 34px)}
+.bdg{flex:none;color:var(--ok);border:1.5px solid var(--ok);border-radius:999px;padding:0 7px;font-size:11px;font-weight:700;line-height:1.6}
+</style>
+</head>
+<body>
+<header><button class="tab" id="pastbtn" data-act="tab" data-id="past">これまでの図鑑</button><h1 id="ttl">やりたいこと図鑑</h1><div class="sub" id="count"></div></header>
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+var KEY='yaritai-zukan-v1',KEY2='yaritai-zukan-v2',MAX=100,DB=null,S,tab='toc',armed=null,editing=null,pick=null,YEAR=new Date().getFullYear();
+try{var r=localStorage.getItem(KEY2);if(r)DB=JSON.parse(r);else{var o=localStorage.getItem(KEY);if(o){DB={view:YEAR,books:{}};DB.books[YEAR]=JSON.parse(o)}}}catch(e){}
+if(!DB)DB={view:YEAR,books:{}};
+function book(y){if(!DB.books[y])DB.books[y]={cats:[],items:[]};return DB.books[y]}
+if(!DB.books[YEAR]){book(YEAR);DB.view=YEAR}
+S=book(DB.view);
+function save(){try{localStorage.setItem(KEY2,JSON.stringify(DB));return true}catch(e){flash('保存できませんでした。写真が多すぎるかもしれません。');return false}}
+function flash(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none'},3000)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function num(it){return S.items.indexOf(it)+1}
+function pad(n){return String(n).padStart(3,'0')}
+function fmt(d){return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日'}
+function catItems(id){return S.items.filter(function(i){return i.cat===id})}
+
+function render(){
+  document.getElementById('ttl').textContent='やりたいこと図鑑'+DB.view;
+  document.getElementById('pastbtn').classList.toggle('on',tab==='past');
+  ['ttl','tabs','count'].forEach(function(k){document.getElementById(k).style.display=tab==='past'?'none':''});
+  var done=S.items.filter(function(i){return i.photo}).length;
+  document.getElementById('count').textContent='登録 '+S.items.length+' / '+MAX+'　達成 '+done;
+  var t='<button class="tab'+(tab==='toc'?' on':'')+'" data-act="tab" data-id="toc">目次</button>';
+  S.cats.forEach(function(c){t+='<button class="tab'+(tab===c.id?' on':'')+'" data-act="tab" data-id="'+c.id+'">'+esc(c.name)+'</button>'});
+  document.getElementById('tabs').innerHTML=t;
+  if(tab!=='toc'&&tab!=='past'&&!S.cats.some(function(c){return c.id===tab}))tab='toc';
+  document.getElementById('main').innerHTML=tab==='toc'?toc():tab==='past'?past():zukan(tab);
+}
+
+function toc(){
+  var h='';
+  S.cats.forEach(function(c){
+    var its=catItems(c.id);
+    h+='<section class="cat"><h2><span><input type="text" class="ordin" inputmode="numeric" maxlength="2" placeholder="--" data-ord="'+c.id+'" value="'+(c.ord?pad2(c.ord):'')+'"> '+esc(c.name)+' <small>'+its.length+'件</small></span>'+
+      (armed==='c'+c.id?'<button class="ib armed" data-act="delcat" data-id="'+c.id+'">削除?</button>':'<button class="ib del" data-act="delcat" data-id="'+c.id+'" title="カテゴリーを削除">−</button>')+'</h2><ul>';
+    its.forEach(function(it,k){
+      var ed=editing===it.id;
+      h+='<li class="'+(it.photo?'done':'')+'"><span class="no">'+pad(num(it))+'</span>'+
+        (ed?'<input type="text" id="ed" value="'+esc(it.text)+'" maxlength="40" data-enter="saveedit" data-id="'+it.id+'"><button class="ib" data-act="saveedit" data-id="'+it.id+'">✓</button>'
+           :'<span class="t">'+esc(it.text)+'</span>'+(it.photo?'<span class="bdg">達成</span>':'')+'<button class="ib" data-act="up" data-id="'+it.id+'"'+(k===0?' disabled':'')+'>△</button><button class="ib" data-act="down" data-id="'+it.id+'"'+(k===its.length-1?' disabled':'')+'>▽</button><button class="ib" data-act="edit" data-id="'+it.id+'">✎</button>')+
+        (armed===it.id?'<button class="ib armed" data-act="del" data-id="'+it.id+'">削除?</button>':'<button class="ib del" data-act="del" data-id="'+it.id+'">−</button>')+'</li>';
+    });
+    h+='</ul><div class="add"><input type="text" id="n'+c.id+'" placeholder="やりたいことを追加" maxlength="40" data-enter="add" data-id="'+c.id+'"><button class="btn" data-act="add" data-id="'+c.id+'"'+(S.items.length>=MAX?' disabled':'')+'>追加</button></div></section>';
+  });
+  if(!S.cats.length)h+='<div class="msg">まずカテゴリーを作りましょう（例：旅行、食べ物、挑戦）</div>';
+  h+='<div class="newcat"><input type="text" id="nc" placeholder="新しいカテゴリー名" maxlength="20" data-enter="addcat"><button class="btn" data-act="addcat">カテゴリー追加</button></div>';
+  if(S.items.length>=MAX)h+='<div class="msg">上限の100個に達しました</div>';
+  return h;
+}
+
+function zukan(id){
+  var its=catItems(id);
+  if(!its.length)return '<div class="msg">目次でやりたいことを追加すると、ここにスペースが作られます</div>';
+  var h='<div class="grid">';
+  its.forEach(function(it){
+    h+='<div class="card'+(it.photo?' got':'')+'"><div class="ph" data-drop="'+it.id+'">'+
+      (it.photo?'<img src="'+it.photo+'" alt="">':'<label><span>写真を追加</span><input type="file" accept="image/*" data-file="'+it.id+'"></label>')+
+      '</div><div class="info"><span class="no">No.'+pad(num(it))+'</span><b>'+esc(it.text)+'</b>'+
+      (it.photo?(edd===it.id?'<input type="date" id="dd" value="'+iso(it.date)+'"><button class="ib" data-act="savedate" data-id="'+it.id+'">✓</button>':'<span class="date">'+esc(it.date)+'</span> <button class="ib" data-act="editdate" data-id="'+it.id+'">✎</button>')+'<br><button class="link" data-act="unphoto" data-id="'+it.id+'">写真を外す</button>':'')+
+      '</div></div>';
+  });
+  return h+'</div>';
+}
+
+function resize(file,cb){
+  var fr=new FileReader();
+  fr.onload=function(){var im=new Image();im.onload=function(){
+    var m=640,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');
+    c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.72))};
+    im.src=fr.result};
+  fr.readAsDataURL(file);
+}
+
+function act(a,id){
+  if(extra(a,id))return;
+  var it=S.items.find(function(i){return i.id===id});
+  if(a==='tab'){tab=id;armed=null;editing=null}
+  else if(a==='addcat'){var v=document.getElementById('nc').value.trim();if(!v)return;S.cats.push({id:uid(),name:v});save()}
+  else if(a==='delcat'){if(armed!=='c'+id){armed='c'+id;return render()}
+    S.cats=S.cats.filter(function(c){return c.id!==id});S.items=S.items.filter(function(i){return i.cat!==id});armed=null;save()}
+  else if(a==='add'){var inp=document.getElementById('n'+id),v=inp.value.trim();if(!v||S.items.length>=MAX)return;
+    S.items.push({id:uid(),cat:id,text:v,photo:null,date:null});save()}
+  else if(a==='del'){if(armed!==id){armed=id;return render()}S.items=S.items.filter(function(i){return i.id!==id});armed=null;save()}
+  else if(a==='edit'){editing=id;armed=null;render();var e=document.getElementById('ed');if(e){e.focus()}return}
+  else if(a==='saveedit'){var e=document.getElementById('ed');if(e&&e.value.trim())it.text=e.value.trim();editing=null;save()}
+  else if(a==='up'||a==='down'){
+    var same=catItems(it.cat),k=same.indexOf(it),o=same[a==='up'?k-1:k+1];
+    if(o){var x=S.items.indexOf(it),y=S.items.indexOf(o);S.items[x]=o;S.items[y]=it;save()}}
+  else if(a==='unphoto'){if(armed!=='p'+id){armed='p'+id;return render()}it.photo=null;it.date=null;armed=null;save()}
+  render();
+}
+
+function pad2(n){return String(n).padStart(2,'0')}
+function got(b){return b.items.filter(function(i){return i.photo}).sort(function(x,z){return (x.ts||0)-(z.ts||0)})}
+function cols(n){for(var c=1;c<=n;c++){if(Math.ceil(n/c)*100/c<=148)return c}return 1}
+function coverOf(b){return b.cover&&b.items.find(function(i){return i.id===b.cover&&i.photo})}
+function past(){
+  var h='';
+  Object.keys(DB.books).sort().reverse().forEach(function(y){
+    var b=book(y),ph=got(b),ci=coverOf(b),n=ph.length;
+    h+='<section class="cat"><div class="cov'+(ci?' pic':'')+'">'+(ci?'<img src="'+ci.photo+'" alt="">':'')+'<div class="cy">'+y+'</div><input type="text" data-owner="'+y+'" value="'+esc(b.owner||'')+'" placeholder="なまえ" maxlength="20"></div>'+
+    '<div class="row"><button class="btn" data-act="openbook" data-id="'+y+'">この図鑑を開く</button><button class="btn s" data-act="covpick" data-id="'+y+'">表紙の写真を選ぶ</button></div>';
+    if(pick===y){h+='<div class="thumbs">'+(n?ph.map(function(i){return '<button class="tb" data-act="setcover" data-id="'+y+'|'+i.id+'"><img src="'+i.photo+'" alt=""></button>'}).join(''):'<span class="sub">達成した写真がまだありません</span>')+'<button class="link" data-act="setcover" data-id="'+y+'|">選ばない（白い表紙）</button></div>'}
+    h+='<h2 style="margin-top:14px">思い出</h2>'+(n?'<div class="post" style="grid-template-columns:repeat('+cols(n)+',1fr)">'+ph.map(function(i){return '<img src="'+i.photo+'" alt="">'}).join('')+'</div>':'<div class="msg">達成した写真が順番に並びます</div>')+
+    '<div class="row"><button class="btn" data-act="postcard" data-id="'+y+'"'+(n?'':' disabled')+'>ポストカードにする</button><button class="btn" data-act="issue" data-id="'+y+'">図鑑として発行する</button></div></section>';
+  });
+  return h;
+}
+var edd=null;
+function iso(s){var m=String(s).match(/(\d+)\D+(\d+)\D+(\d+)/);return m?m[1]+'-'+pad2(m[2])+'-'+pad2(m[3]):''}
+function extra(a,id){
+  if(a==='editdate'){edd=id;render();return 1}
+  if(a==='savedate'){
+    var it=S.items.find(function(i){return i.id===id}),el=document.getElementById('dd'),m=el&&el.value.match(/^(\d+)-(\d+)-(\d+)$/);
+    if(it&&m){var dt=new Date(+m[1],m[2]-1,+m[3]);it.date=fmt(dt);it.ts=dt.getTime()+((it.ts||0)%86400000)}
+    edd=null;save();render();return 1}
+  if(a==='tab'&&id==='past'&&tab==='past'){tab='toc';render();return 1}
+  if(a==='openbook'){DB.view=+id;S=book(id);tab='toc';armed=null;editing=null;save();render();return 1}
+  if(a==='covpick'){pick=pick===id?null:id;render();return 1}
+  if(a==='setcover'){var p=id.split('|');book(p[0]).cover=p[1]||null;pick=null;save();render();return 1}
+  if(a==='postcard'){postcard(id);return 1}
+  if(a==='issue'){issue(id);return 1}
+  return 0;
+}
+function load(src){return new Promise(function(res){var im=new Image();im.onload=function(){res(im)};im.onerror=function(){res(null)};im.src=src})}
+function crop(g,im,x,y,w,h){var s=Math.max(w/im.width,h/im.height),sw=w/s,sh=h/s;g.drawImage(im,(im.width-sw)/2,(im.height-sh)/2,sw,sh,x,y,w,h)}
+function mk(w,h){var c=document.createElement('canvas');c.width=w;c.height=h;var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#333';g.textBaseline='top';return [c,g]}
+function fnt(g,sz,bd){g.font=(bd?'bold ':'')+sz+'px Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif'}
+function tx(g,t,x,y,sz,al,bd){fnt(g,sz,bd);g.textAlign=al||'left';g.fillText(t,x,y)}
+function fit(g,t,w){while(t.length>1&&g.measureText(t).width>w)t=t.slice(0,-2)+'…';return t}
+function saveFile(name,data){
+  var c=window.claude&&claude.use?claude.use('downloads'):Promise.resolve(null);
+  c.then(function(d){if(!d)return flash('この画面では保存できません。通常のブラウザで開いてください');
+    return d.save({filename:name,data:data}).catch(function(e){if(!e||e.code!=='declined')flash('保存できませんでした')})});
+}
+async function postcard(y){
+  var ph=got(book(y));if(!ph.length)return;
+  flash('画像を作成中…');
+  var W=1181,H=1748,c=cols(ph.length),s=W/c,m=mk(W,H),g=m[1];
+  for(var i=0;i<ph.length;i++){var im=await load(ph[i].photo);if(im)crop(g,im,Math.floor((i%c)*s),Math.floor(Math.floor(i/c)*s),Math.ceil(s),Math.ceil(s))}
+  m[0].toBlob(function(bl){saveFile('yaritai-zukan-'+y+'-postcard.jpg',bl)},'image/jpeg',.92);
+}
+async function issue(y){
+  if(!window.jspdf)return flash('PDFの準備ができていません');
+  flash('PDFを作成中…');
+  var b=book(y),W=1240,H=1754,pages=[],m,g,im,ci=coverOf(b);
+  function push(){pages.push(m[0].toDataURL('image/jpeg',.85))}
+  m=mk(W,H);g=m[1];
+  if(ci){im=await load(ci.photo);if(im){crop(g,im,0,0,W,H);g.fillStyle='rgba(255,255,255,.78)';g.fillRect(0,560,W,420)}}
+  g.fillStyle='#333';tx(g,String(y),W/2,620,170,'center',1);if(b.owner)tx(g,b.owner,W/2,860,56,'center');push();
+  var L=[];
+  b.cats.forEach(function(c){var a=b.items.filter(function(i){return i.cat===c.id&&i.photo});if(!a.length)return;L.push([c.name,1]);a.forEach(function(i){L.push(['　'+pad(b.items.indexOf(i)+1)+'　'+i.text,0])})});
+  var np=Math.max(1,Math.ceil(L.length/32)),d=new Date();
+  for(var p=0;p<np;p++){
+    m=mk(W,H);g=m[1];tx(g,y+'年 目次',80,70,48,'left',1);
+    L.slice(p*32,p*32+32).forEach(function(l,k){tx(g,l[0],80,170+k*44,l[1]?34:30,'left',l[1])});
+    if(p===np-1)tx(g,'発行日　'+d.getFullYear()+'年'+pad2(d.getMonth()+1)+'月'+pad2(d.getDate())+'日',W/2,1660,32,'center');
+    push();
+  }
+  for(var ci2=0;ci2<b.cats.length;ci2++){
+    var c=b.cats[ci2],its=b.items.filter(function(i){return i.cat===c.id&&i.photo});
+    for(var q=0;q<Math.ceil(its.length/9);q++){
+      m=mk(W,H);g=m[1];tx(g,c.name,80,60,48,'left',1);
+      var sl=its.slice(q*9,q*9+9);
+      for(var k=0;k<sl.length;k++){
+        var it=sl[k],x=80+(k%3)*370,yy=170+Math.floor(k/3)*520;
+        g.fillStyle='#eaf5fb';g.fillRect(x,yy,340,340);
+        if(it.photo){im=await load(it.photo);if(im)crop(g,im,x,yy,340,340)}
+        g.strokeStyle='#999';g.strokeRect(x,yy,340,440);g.fillStyle='#333';
+        tx(g,'No.'+pad(b.items.indexOf(it)+1),x+10,yy+348,22,'left');
+        fnt(g,28,1);tx(g,fit(g,it.text,320),x+10,yy+376,28,'left',1);
+        if(it.photo)tx(g,it.date,x+10,yy+412,22,'left');
+      }
+      push();
+    }
+  }
+  var J=window.jspdf.jsPDF,pdf=new J('p','mm','a4');
+  pages.forEach(function(u,i){if(i)pdf.addPage();pdf.addImage(u,'JPEG',0,0,210,297)});
+  saveFile('yaritai-zukan-'+y+'.pdf',pdf.output('blob'));
+}
+document.addEventListener('change',function(e){
+  var id=e.target.dataset.ord;if(!id)return;
+  var c=S.cats.find(function(x){return x.id===id}),v=parseInt(e.target.value.replace(/\D/g,''),10);
+  if(!c)return;
+  if(v>=1&&v<=99)c.ord=v;else delete c.ord;
+  S.cats.sort(function(x,z){return (x.ord||100)-(z.ord||100)});
+  save();render();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.dataset.ord)e.target.blur()});
+document.addEventListener('input',function(e){var y=e.target.dataset.owner;if(y){book(y).owner=e.target.value;save()}});
+var sx=0,sy=0,sOk=false;
+document.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;sOk=e.touches.length===1&&!e.target.closest('.tabs,input,.thumbs')},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(!sOk||tab==='past')return;sOk=false;
+  var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
+  var order=['toc'].concat(S.cats.map(function(c){return c.id})),i=order.indexOf(tab),n=i+(dx<0?1:-1);
+  if(i<0||n<0||n>=order.length)return;
+  tab=order[n];armed=null;editing=null;render();window.scrollTo(0,0);
+  var m=document.getElementById('main');
+  if(m.animate)m.animate([{transform:'translateX('+(dx<0?60:-60)+'px)',opacity:0},{transform:'none',opacity:1}],{duration:220,easing:'ease-out'});
+},{passive:true});
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');
+  if(b){act(b.dataset.act,b.dataset.id)}else if(armed){armed=null;render()}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.dataset.enter&&!e.isComposing)act(e.target.dataset.enter,e.target.dataset.id);
+});
+function addPhoto(id,file){
+  if(!file||!/^image\//.test(file.type))return;
+  resize(file,function(url){
+    var it=S.items.find(function(i){return i.id===id});if(!it)return;
+    var bp=it.photo,bd=it.date;it.photo=url;it.ts=Date.now();it.date=fmt(new Date());
+    if(!save()){it.photo=bp;it.date=bd}
+    render();
+  });
+}
+document.addEventListener('change',function(e){
+  var id=e.target.dataset.file;if(id)addPhoto(id,e.target.files[0]);
+});
+document.addEventListener('dragover',function(e){var p=e.target.closest('.ph');if(p&&p.dataset.drop){e.preventDefault();p.classList.add('over')}});
+document.addEventListener('dragleave',function(e){var p=e.target.closest('.ph');if(p)p.classList.remove('over')});
+document.addEventListener('drop',function(e){
+  var p=e.target.closest('.ph');if(!p||!p.dataset.drop)return;
+  e.preventDefault();p.classList.remove('over');addPhoto(p.dataset.drop,e.dataTransfer.files[0]);
+});
+render();
+</script>
+</body>
+</html>
